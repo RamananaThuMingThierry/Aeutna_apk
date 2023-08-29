@@ -29,6 +29,9 @@ class _NousContactezState extends State<NousContactez> {
       appBar: AppBar(
         title: Text("Nous Contactez", style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blueGrey,
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.message_outlined))
+        ],
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(

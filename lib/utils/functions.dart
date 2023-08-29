@@ -1,3 +1,4 @@
+import 'package:aeutna/utils/constant.dart';
 import 'package:aeutna/widgets/ligne_horizontale.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ void deconnectionAlertDialog(BuildContext context){
       barrierDismissible: true,
       builder: (BuildContext buildContext){
         return AlertDialog(
-          title: Text("Déconnection", textAlign:TextAlign.center,style: TextStyle(color: Colors.green),),
+          title: Text("Déconnection", textAlign:TextAlign.center,style: TextStyle(color: Colors.blueGrey),),
           content: SizedBox(
             height: 80,
             child: Column(
@@ -115,6 +116,30 @@ void deconnectionAlertDialog(BuildContext context){
           ],
         );
       });
+}
+
+Padding TextTitre({String? name}){
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 12),
+    child: Row(
+      children: [
+        Text("${name}", style: style.copyWith(color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 15),),
+      ],
+    ),
+  );
+}
+
+Widget listePortes({String? name, String? value}){
+  return Padding(
+    padding: EdgeInsets.only(top: 4),
+    child:  RichText(text: TextSpan(
+        text: "${name}",
+        style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),
+        children: [
+          TextSpan(text: "${value}", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal)),
+        ]
+    )),
+  );
 }
 
 void onLoading(BuildContext context){

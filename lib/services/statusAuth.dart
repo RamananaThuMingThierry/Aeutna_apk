@@ -3,6 +3,7 @@ import 'package:aeutna/pages/HomePage.dart';
 import 'package:aeutna/services/authservices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Status extends StatefulWidget{
   @override
@@ -36,12 +37,18 @@ class StatusState extends State<Status>{
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.waiting){
-          return Center(child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-            ],
-          ),);
+          return Container(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitCircle(
+                  color: Colors.blueGrey,
+                  size: 50,
+                ),
+              ],
+            ),
+          );
         }else{
           if(snapshot.hasData){
             return HomePage();

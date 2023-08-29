@@ -1,22 +1,19 @@
 import 'package:aeutna/model/User.dart';
-import 'package:aeutna/pages/users/showUsers.dart';
 import 'package:aeutna/utils/loading.dart';
 import 'package:aeutna/widgets/donnees_vide.dart';
 import 'package:aeutna/widgets/showMembres.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:provider/provider.dart';
 
-class MembresAEUTNA extends StatefulWidget {
-  const MembresAEUTNA({Key? key}) : super(key: key);
+class Ankavia extends StatefulWidget {
+  const Ankavia({Key? key}) : super(key: key);
 
   @override
-  State<MembresAEUTNA> createState() => _MembresAEUTNAState();
+  State<Ankavia> createState() => _AnkaviaState();
 }
 
-class _MembresAEUTNAState extends State<MembresAEUTNA> {
+class _AnkaviaState extends State<Ankavia> {
   // Déclarations des variables
 
   List<UserM> _allUsers = [];
@@ -25,7 +22,7 @@ class _MembresAEUTNAState extends State<MembresAEUTNA> {
   final TextEditingController _searchController = TextEditingController();
 
   getUsersStream() async{
-    var data = await FirebaseFirestore.instance.collection("users").orderBy("numero_carte_aeutna").get();
+    var data = await FirebaseFirestore.instance.collection("users").where("axes", isEqualTo: "Ankavia").get();
     setState(() {
       _allUsers = data.docs.map((e) {
         return UserM.fromJson(e.data() as Map<String, dynamic>);
@@ -71,13 +68,14 @@ class _MembresAEUTNAState extends State<MembresAEUTNA> {
 
   var connectionStatus;
   late InternetConnectionChecker connectionChecker;
+ int total = 0;
 
   @override
   void initState() {
     super.initState();
+    total = _resultList!.length;
     getUsersStream();
     _searchController.addListener(_onSearchChanged);
-
     connectionChecker = InternetConnectionChecker();
     connectionChecker.onStatusChange.listen((status) {
       setState(() {
@@ -93,14 +91,15 @@ class _MembresAEUTNAState extends State<MembresAEUTNA> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text("Membres A.E.U.T.N.A"),
-        backgroundColor: Colors.blueGrey,
+        title: Text("Ankavia"),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.people)),
+          Chip(label: Text("${total}", style: TextStyle(color: Colors.blueGrey),))
         ],
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey,
       ),
+      backgroundColor: Colors.grey,
       body: Column(
         children: [
           Padding(
@@ -129,21 +128,21 @@ class _MembresAEUTNAState extends State<MembresAEUTNA> {
             ),
           ),
           Expanded(
-              child: ListView.builder(
-              itemCount: _resultList!.length,
-              itemBuilder: (context, i){
-                UserM user = _resultList![i];
-                return user == null
-                    ?
-                      DonneesVide()
-                    :
-                ShowMembres(
+            child: ListView.builder(
+                itemCount: _resultList!.length,
+                itemBuilder: (context, i){
+                  UserM user = _resultList![i];
+                  return user == null
+                      ?
+                  DonneesVide()
+                      :
+                  ShowMembres(
                     userM: user,
-                );
-              }),),
+                  );
+                }),),
         ],
       ),
-      // body: Center(),
     );
   }
+
 }
